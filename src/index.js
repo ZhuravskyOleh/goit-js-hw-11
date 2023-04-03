@@ -14,7 +14,7 @@ loadMoreBtn.addEventListener('click', handleLoadMoreClick);
 
 function handleFormSubmit(event) {
   event.preventDefault();
-  const searchQuery = event.target.elements.searchQuery.value;
+  const searchQuery = event.target.searchQuery.value.trim();
   if (!searchQuery) {
     return;
   }
@@ -44,6 +44,14 @@ async function fetchImages(searchQuery) {
     const response = await axios.get(url);
     const data = response.data;
 
+    handleImageFetch(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function handleImageFetch(data) {
+  try {
     if (data.hits.length === 0) {
       Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
       return;
@@ -71,6 +79,7 @@ async function fetchImages(searchQuery) {
     console.error(error);
   }
 }
+
 
 function appendImages(images) {
   const imageCards = images.map(
